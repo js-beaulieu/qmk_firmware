@@ -26,16 +26,38 @@ enum planck_layers {
   _LOWER,
   _RAISE,
   _ADJUST,
+  _TMUX,
 };
 
 enum planck_keycodes {
   QWERTY = SAFE_RANGE,
   BACKLIT,
   ACCENTS,
+  COPY,
+  CUT,
 };
 
 #define LOWER MO(_LOWER)
 #define RAISE MO(_RAISE)
+#define TMUX MO(_TMUX)
+#define XXXXXXX KC_NO
+
+void flash_backlight(int count) {
+  for (int i = 0; i < count; i++) {
+    backlight_toggle();
+    if (i == 0) {
+      wait_ms(100);
+    } else {
+      wait_ms(250);
+    }
+    backlight_toggle();
+
+    if (i != count - 1) {
+      wait_ms(250);
+    }
+
+  }
+}
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -45,50 +67,50 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     * |------+------+------+------+------+------+------+------+------+------+------+------|
     * | C/Esc|   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |   '  |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  | Enter|
+    * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  | S/Ent|
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * | Ctrl |  Fn  |  Alt |  OS  | Lower|    Space    | Raise|  OS  |  Alt |  Fn  | Ctrl |
+    * | Ctrl |  OS  |  Alt | Tmux | Lower|    Space    | Raise|      |      |  Fn  | Ctrl |
     * `-----------------------------------------------------------------------------------'
     */
     [_QWERTY] = LAYOUT_planck_grid(
         KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_BSPC,
         CTL_T(KC_ESC), KC_A, KC_S, KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT,
-        KC_LSFT, KC_Z, KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, KC_ENT,
-        KC_LCTL, BACKLIT, KC_LALT, KC_LGUI, LOWER, KC_SPACE, KC_SPACE, RAISE, KC_RGUI, KC_RALT, BACKLIT, KC_RCTL),
+        KC_LSFT, KC_Z, KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, RSFT_T(KC_ENT),
+        KC_LCTL, KC_LGUI, KC_LALT, XXXXXXX, LOWER, KC_SPACE, KC_SPACE, RAISE, XXXXXXX, XXXXXXX, BACKLIT, KC_RCTL),
 
     /* LOWER
     * ,-----------------------------------------------------------------------------------.
     * |   ~  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * |      |      |      |      |      |      |      |   -  |   +  |   (  |   )  |  \   |
+    * |      |      |      |      |      |      |      |      |      |      |      |   \  |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * |      |      |  Cut | Copy | Paste|      |      |      |   [  |   ]  |   {  |   }  |
+    * |      | Undo |  Cut | Copy | Paste|      |      |      |      |      |Vol Dn|Vol Up|
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * |      |      |      |      |      |             |      |      |      |      |      |
-    * `-----------------------------------------------------------------------------------'()<>{}
+    * |      |      |      |      |      |     End     |      | Pl/Pa| Prev | Next | Mute |
+    * `-----------------------------------------------------------------------------------'
     */
     [_LOWER] = LAYOUT_planck_grid(
         KC_TILD, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_BSPC,
-        _______, _______, _______, _______, _______, _______, _______, KC_MINS, KC_PLUS, KC_LPRN, KC_RPRN, S(KC_NUBS),
-        _______, _______, KC_CUT, KC_COPY, LSFT(KC_INS), _______, _______, _______, KC_LBRC, KC_RBRC, KC_LCBR, KC_RCBR,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______),
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_NUBS,
+        _______, _______, CUT, COPY, LSFT(KC_INS), _______, _______, _______, _______, _______, KC_VOLD, KC_VOLU,
+        _______, _______, _______, _______, _______, KC_END, KC_END, _______, KC_MEDIA_PLAY_PAUSE, KC_MEDIA_PREV_TRACK, KC_MEDIA_NEXT_TRACK, KC_MUTE),
 
     /* RAISE
     * ,-----------------------------------------------------------------------------------.
-    * |   `  |   !  |   @  |   #  |   $  |   %  |   ^  |   &  |   *  |   =  |  Ins |  Del |
+    * |   `  |   !  |   @  |   #  |   $  |   %  |   ^  |   &  |   *  |   _  |   =  |  Del |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * |      |      |      |      |      |      | Left | Down |  Up  | Right|      |   |  |
+    * |   +  |   -  |   (  |   )  |   <  |   >  | Left | Down |  Up  | Right|      |   |  |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * |      |      |      |      |      |      |      |      |      |      |      |      |
+    * |   [  |   ]  |   {  |   }  |      |      |      |      |      |      |      |      |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * |      |      |      |      |      |             |      |      |      |      |      |
+    * |      |      |      |      |      |     Home    |      |      |      |      |      |
     * `-----------------------------------------------------------------------------------'
     */
     [_RAISE] = LAYOUT_planck_grid(
-        KC_GRV, KC_EXLM, KC_AT, KC_HASH, KC_DLR, KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_EQL, KC_INS, KC_DEL,
-        _______, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, _______, KC_PIPE,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______),
+        KC_GRV, KC_EXLM, KC_AT, KC_HASH, KC_DLR, KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_UNDS, KC_EQL, KC_DEL,
+        KC_PLUS, KC_MINS, KC_LPRN, KC_RPRN, KC_LABK, KC_RABK, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, _______, KC_PIPE,
+        KC_LBRC, KC_RBRC, KC_LCBR, KC_RCBR, _______, _______, _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, KC_HOME, KC_HOME, _______, _______, _______, _______, _______),
 
     /* _ADJUST
     * ,-----------------------------------------------------------------------------------.
@@ -102,10 +124,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     * `-----------------------------------------------------------------------------------'
     */
     [_ADJUST] = LAYOUT_planck_grid(
-        _______, RESET, _______, _______, _______, _______, _______, _______, KC_F10, KC_F11, KC_F11, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, KC_F7, KC_F8, KC_F9, _______,
-        _______, _______, _______, _______, _______, AG_NORM, AG_SWAP, _______, KC_F4, KC_F5, KC_F6, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, KC_F1, KC_F2, KC_F3, _______),
+        XXXXXXX, RESET, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_F10, KC_F11, KC_F11, XXXXXXX,
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_F7, KC_F8, KC_F9, XXXXXXX,
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, AG_NORM, AG_SWAP, XXXXXXX, KC_F4, KC_F5, KC_F6, XXXXXXX,
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, XXXXXXX, XXXXXXX, _______, KC_F1, KC_F2, KC_F3, XXXXXXX),
 
 };
 
@@ -113,6 +135,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 uint32_t layer_state_set_user(uint32_t state) {
   return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
+
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
@@ -140,6 +163,44 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
-  }
-  return true;
+    case AG_NORM:
+      if (record->event.pressed) {
+        print("mode just switched to win/linux\n");
+        #ifdef BACKLIGHT_ENABLE
+          flash_backlight(2);
+        #endif
+      }
+      return true;
+      break;
+    case AG_SWAP:
+      if (record->event.pressed) {
+        print("mode just switched to macos\n");
+        #ifdef BACKLIGHT_ENABLE
+          flash_backlight(3);
+        #endif
+      }
+      return true;
+      break;
+    case CUT:
+      if (record->event.pressed) {
+        if (keymap_config.swap_lalt_lgui) {
+          SEND_STRING(SS_LGUI("x"));
+        } else {
+          SEND_STRING(SS_LCTRL("x"));
+        }
+      }
+      return false;
+      break;
+    case COPY:
+      if (record->event.pressed) {
+        if (keymap_config.swap_lalt_lgui) {
+          SEND_STRING(SS_LGUI("c"));
+        } else {
+          SEND_STRING(SS_LCTRL("c"));
+        }
+      }
+      return false;
+      break;
+    }
+    return true;
 }
