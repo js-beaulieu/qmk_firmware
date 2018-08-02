@@ -17,6 +17,9 @@
 
 // Backlighting
 #undef BACKLIGHT_LEVELS
-#define BACKLIGHT_LEVELS 1
+#define BACKLIGHT_LEVELS 2
+
+// Tap dance
+#define TAPPING_TERM 250
 
 #endif
