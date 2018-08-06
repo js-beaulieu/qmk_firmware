@@ -41,6 +41,12 @@ enum planck_keycodes {
 #define RAISE MO(_RAISE)
 #define TMUX MO(_TMUX)
 #define ___X___ KC_NO
+#define SELECT_LEFT LSFT(LALT(KC_LEFT))
+#define SELECT_RIGHT LSFT(LALT(KC_RIGHT))
+#define SELECT_UP LSFT(KC_UP)
+#define SELECT_DOWN LSFT(KC_DOWN)
+#define SELECT_HOME LSFT(KC_HOME)
+#define SELECT_END LSFT(KC_END)
 
 // Tap dance
 enum {
@@ -79,7 +85,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     * |------+------+------+------+------+------+------+------+------+------+------+------|
     * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  | S/Ent|
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * | Ctrl |  OS  |  Alt | Tmux | Lower|    Space    | Raise|      |      |  Fn  | Ctrl |
+    * | Ctrl |  OS  |  Alt |      | Lower|    Space    | Raise|      |      |  Fn  | Ctrl |
     * `-----------------------------------------------------------------------------------'
     */
     [_QWERTY] = LAYOUT_planck_grid(
@@ -90,54 +96,54 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     /* LOWER
     * ,-----------------------------------------------------------------------------------.
-    * |   ~  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  |  Del |
+    * |   ~  |      |      |      |      |      |      |      |   7  |   8  |   9  |  Del |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * |      |   -  |   +  |   (  |   )  |      |      |      |      |      |      |   \  |
+    * |      |   -  |   +  |   (  |   )  |      |      |      |   4  |   5  |   6  |   \  |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * |      |   [  |   ]  |   {  |   }  |      |      |      |      |      |      |      |
+    * |      |   [  |   ]  |   {  |   }  |      |      |      |   1  |   2  |   3  |      |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * |      |      |      |      |      |     End     |      |      |      |      |      |
+    * |      |      |      |      |      |             |      |      |   0  |      |      |
     * `-----------------------------------------------------------------------------------'
     */
     [_LOWER] = LAYOUT_planck_grid(
-        KC_TILD, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_DEL,
-        ___X___, KC_MINS, KC_PLUS, KC_LPRN, KC_RPRN, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, KC_NUBS,
-        ___X___, KC_LBRC, KC_RBRC, KC_LCBR, KC_RCBR, ___X___, ___X___, ___X___, ___X___, ___X___, _______, _______,
-        ___X___, ___X___, ___X___, ___X___, _______, KC_END, KC_END, _______, _______, _______, _______, _______),
+        KC_TILD, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, KC_7, KC_8, KC_9, KC_DEL,
+        ___X___, KC_MINS, KC_PLUS, KC_LPRN, KC_RPRN, ___X___, ___X___, ___X___, KC_4, KC_5, KC_6, KC_NUBS,
+        ___X___, KC_LBRC, KC_RBRC, KC_LCBR, KC_RCBR, ___X___, ___X___, ___X___, KC_1, KC_2, KC_3, ___X___,
+        ___X___, ___X___, ___X___, ___X___, _______, _______, _______, _______, ___X___, KC_0, ___X___, ___X___),
 
     /* RAISE
     * ,-----------------------------------------------------------------------------------.
     * |   `  |   !  |   @  |   #  |   $  |   %  |   ^  |   &  |   *  |   _  |   =  | Bksp |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * |      |      |      |      |      |      | Left | Down |  Up  | Right|      |   |  |
+    * |      |      |      |      |      | Home | Left | Down |  Up  | Right|  End |   |  |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * |      |      |      |      |      |      |      |      |      |Vol Dn|Vol Up| Mute |
+    * |      |      |      |      |      |      |      |      |      |      |      |      |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * |      |      |      |      |      |     Home    |      |      | Prev | Next | Pl/Pa|
+    * |      |      |      |      |      |             |      |      |      |      |      |
     * `-----------------------------------------------------------------------------------'
     */
     [_RAISE] = LAYOUT_planck_grid(
         KC_GRV, KC_EXLM, KC_AT, KC_HASH, KC_DLR, KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_UNDS, KC_EQL, KC_BSPC,
-        _______, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, _______, KC_PIPE,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_VOLD, KC_VOLU, KC_MUTE,
-        _______, _______, _______, _______, _______, KC_HOME, KC_HOME, _______, _______, KC_MEDIA_PREV_TRACK, KC_MEDIA_NEXT_TRACK, KC_MEDIA_PLAY_PAUSE),
+        _______, _______, _______, _______, _______, KC_HOME, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, KC_END, KC_PIPE,
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, ___X___, ___X___, ___X___,
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, ___X___, ___X___, ___X___),
 
     /* _ADJUST
     * ,-----------------------------------------------------------------------------------.
-    * |      |      |      |      |      |      |      |      |      |      |      |      |
+    * |  F10 |  F11 |  F12 |      |      |      |      |      |      |      |      | Reset|
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * |      |      |      |      |      |      |      |      |  F9  |  F10 |  F11 |  F12 |
+    * |  F7  |  F8  |  F9  |      |      | sHome| sLeft| sDown|  sUp |sRight| sEnd |      |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * |      |      |      |      |      |  Win | macOS|      |  F5  |  F6  |  F7  |  F8  |
+    * |  F4  |  F5  |  F6  |      |      |  Win | macOS|      |      |Vol Dn|Vol Up| Mute |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * | Reset|      |      |      |      |             |      |  F1  |  F2  |  F3  |  F4  |
+    * |  F1  |  F2  |  F3  |      |      |             |      |      |Prev | Next | Pl/Pa|
     * `-----------------------------------------------------------------------------------'
     */
     [_ADJUST] = LAYOUT_planck_grid(
-        ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,
-        ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, KC_F9, KC_F10, KC_F11, KC_F12,
-        ___X___, ___X___, ___X___, ___X___, ___X___, AG_NORM, AG_SWAP, ___X___, KC_F5, KC_F6, KC_F7, KC_F8,
-        RESET, ___X___, ___X___, ___X___, _______, ___X___, ___X___, ___X___, KC_F1, KC_F2, KC_F3, KC_F4),
+        KC_F10, KC_F11, KC_F12, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, RESET,
+        KC_F7, KC_F7, KC_F9, ___X___, ___X___, SELECT_HOME, SELECT_LEFT, SELECT_DOWN, SELECT_UP, SELECT_RIGHT, SELECT_END, ___X___,
+        KC_F4, KC_F5, KC_F6, ___X___, ___X___, AG_NORM, AG_SWAP, ___X___, ___X___, KC_VOLD, KC_VOLU, KC_MUTE,
+        KC_F1, KC_F2, KC_F3, _______, _______, ___X___, ___X___, _______, ___X___, KC_MEDIA_PREV_TRACK, KC_MEDIA_NEXT_TRACK, KC_MEDIA_PLAY_PAUSE),
 
     /* _TMUX
     * ,-----------------------------------------------------------------------------------.
@@ -173,23 +179,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
-    // case BACKLIT:
-    //   if (record->event.pressed) {
-    //     register_code(KC_RSFT);
-    //     #ifdef BACKLIGHT_ENABLE
-    //       backlight_step();
-    //     #endif
-    //     #ifdef KEYBOARD_planck_rev5
-    //       PORTE &= ~(1<<6);
-    //     #endif
-    //   } else {
-    //     unregister_code(KC_RSFT);
-    //     #ifdef KEYBOARD_planck_rev5
-    //       PORTE |= (1<<6);
-    //     #endif
-    //   }
-    //   return false;
-    //   break;
+    case BACKLIT:
+      if (record->event.pressed) {
+        register_code(KC_RSFT);
+        #ifdef BACKLIGHT_ENABLE
+          backlight_step();
+        #endif
+        #ifdef KEYBOARD_planck_rev5
+          PORTE &= ~(1<<6);
+        #endif
+      } else {
+        unregister_code(KC_RSFT);
+        #ifdef KEYBOARD_planck_rev5
+          PORTE |= (1<<6);
+        #endif
+      }
+      return false;
+      break;
     case AG_NORM:
       if (record->event.pressed) {
         print("mode just switched to win/linux\n");
@@ -207,26 +213,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         #endif
       }
       return true;
-      break;
-    case CUT:
-      if (record->event.pressed) {
-        if (keymap_config.swap_lalt_lgui) {
-          SEND_STRING(SS_LGUI("x"));
-        } else {
-          SEND_STRING(SS_LCTRL("x"));
-        }
-      }
-      return false;
-      break;
-    case COPY:
-      if (record->event.pressed) {
-        if (keymap_config.swap_lalt_lgui) {
-          SEND_STRING(SS_LGUI("c"));
-        } else {
-          SEND_STRING(SS_LCTRL("c"));
-        }
-      }
-      return false;
       break;
     }
     return true;
